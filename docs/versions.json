@@ -1,0 +1,11 @@
+{
+  "latest": "v1.0.0",
+  "versions": [
+    {
+      "id": "v1.0.0",
+      "label": "Spiffy Roller v1.0.0",
+      "manifest": "./manifests/v1.0.0.json",
+      "stable": true
+    }
+  ]
+}
