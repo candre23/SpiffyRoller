@@ -4,7 +4,7 @@
     {
       "id": "v1.0.0",
       "label": "Spiffy Roller v1.0.0",
-      "manifest": "./manifests/v1.0.0.json",
+      "manifest": "./manifests/v1.0.0-release-20260731.json",
       "stable": true
     }
   ]
