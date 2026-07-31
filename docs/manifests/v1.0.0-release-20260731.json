@@ -1,0 +1,17 @@
+{
+  "name": "Spiffy Roller",
+  "version": "1.0.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "improv": false,
+      "parts": [
+        {
+          "path": "../firmware/spiffy-roller-v1.0.0-factory-20260731.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
