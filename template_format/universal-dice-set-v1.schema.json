@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/universal-dice-set-v1.schema.json",
+  "title": "Universal Dice Set",
+  "type": "object",
+  "required": [
+    "format",
+    "format_version",
+    "id",
+    "name",
+    "dice"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "format": {
+      "const": "universal-dice-set"
+    },
+    "format_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "maxLength": 31
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 47
+    },
+    "dice": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "$ref": "#/$defs/die"
+      }
+    },
+    "rules": {
+      "type": "string",
+      "maxLength": 127,
+      "pattern": "^(?![\\\\/])(?!.*\\.\\.).+$"
+    }
+  },
+  "$defs": {
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$"
+    },
+    "die": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "sides",
+        "shape",
+        "body_color",
+        "ink_color",
+        "faces"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 31
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 47
+        },
+        "sides": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 64
+        },
+        "shape": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 15
+        },
+        "body_color": {
+          "$ref": "#/$defs/color"
+        },
+        "ink_color": {
+          "$ref": "#/$defs/color"
+        },
+        "faces": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/face"
+          }
+        }
+      }
+    },
+    "face": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "value": {
+          "type": "integer"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 31
+        },
+        "image": {
+          "type": "string",
+          "maxLength": 127,
+          "pattern": "^(?![\\\\/])(?!.*\\.\\.).+$"
+        },
+        "image_mode": {
+          "enum": [
+            "mask",
+            "indexed"
+          ]
+        },
+        "body_color": {
+          "$ref": "#/$defs/color"
+        },
+        "ink_color": {
+          "$ref": "#/$defs/color"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "image"
+            ]
+          },
+          "then": {
+            "required": [
+              "image_mode"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "image_mode"
+            ]
+          },
+          "then": {
+            "required": [
+              "image"
+            ]
+          }
+        }
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "value"
+          ]
+        },
+        {
+          "required": [
+            "label"
+          ]
+        },
+        {
+          "required": [
+            "image"
+          ]
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "genesysSymbols": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "advantage": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "triumph": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "failure": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "threat": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "despair": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

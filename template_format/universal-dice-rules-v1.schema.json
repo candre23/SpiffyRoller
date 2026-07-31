@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Universal Dice Rules v1",
+  "type": "object",
+  "required": [
+    "format",
+    "format_version",
+    "results"
+  ],
+  "properties": {
+    "format": {
+      "const": "universal-dice-rules"
+    },
+    "format_version": {
+      "const": 1
+    },
+    "controls": {
+      "type": "array",
+      "maxItems": 8
+    },
+    "results": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "actions": {
+      "type": "array",
+      "maxItems": 4
+    }
+  },
+  "description": "Rules format including numeric results and the dedicated Genesys narrative-symbol cancellation result type."
+}
