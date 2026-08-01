@@ -73,21 +73,21 @@ Precompiled firmware and source archives are also available from the [GitHub Rel
 
 ## Custom Dice Sets
 
-Spiffy Roller supports portable `.set` archives containing custom dice definitions, artwork, colors, values, and optional Lua rules.
+Spiffy Roller supports portable `.set` archives containing custom dice definitions, artwork, colors, values, and optional Lua rules.  To install a .set file, connect the module to your PC with a USB cable, select USB Transfer Mode in the settings menu, and copy the sets into the '/templates' folder on the device.  A custom dice set for the Freeform Universal open source RPG ruleset is included in this repo as 'freeform_universal_v1.set'
 
 Custom sets can be created with the companion graphical editor:
 
 **Spiffy Roller Set Maker**  
 https://github.com/candre23/SpiffyRoller_SetMaker
 
-Premade and example sets are available here:
+Additional premade sets are available here:
 
 **Spiffy Roller Dice Sets**  
 https://github.com/candre23/SpiffyRoller_DiceSets
 
 The `.set` format is open and documented so sets may also be created by hand or by third-party tools.
 
-See [dice_templates.md](dice_templates.md) for the complete format specification.
+See [custom_dice_template_guide.md](custom_dice_template_guide.md) for the complete format specification.
 
 ## Rolling Sound Effect
 
