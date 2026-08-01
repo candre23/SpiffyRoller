@@ -25,9 +25,13 @@ Spiffy Roller is intended to work both as a straightforward electronic replaceme
 
 <img width="600" height="615" alt="PXL_20260801_133522451" src="https://github.com/user-attachments/assets/c423da78-1d18-4532-9c9f-8baefe7a34a4" />
 
-<img width="600" height="672" alt="PXL_20260801_133915193 MACRO_FOCUS MP" src="https://github.com/user-attachments/assets/1d4cd27c-3ef7-4d59-aea5-0eb8d364d094" />
+<img width="600" height="437" alt="PXL_20260801_162207671" src="https://github.com/user-attachments/assets/d1ad2022-8c0b-4c81-8f96-b002a3da224a" />
+
+<img width="600" height="561" alt="PXL_20260801_162420514" src="https://github.com/user-attachments/assets/6fb6d078-e7e0-4298-8560-6d4915044e97" />
 
 <img width="600" height="755" alt="PXL_20260801_133818664 MACRO_FOCUS MP" src="https://github.com/user-attachments/assets/b52cac6e-f1eb-4b7a-bd11-8cf9fbf12caa" />
+
+<img width="600" height="692" alt="PXL_20260801_162116445 MACRO_FOCUS" src="https://github.com/user-attachments/assets/b24cf0e3-a6a5-4f70-871c-f38fb040a2bf" />
 
 
 
