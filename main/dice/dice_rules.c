@@ -181,6 +181,121 @@ static void push_symbols(lua_State *state, const dice_set_face_t *face)
     push_symbol(state, "despair", face->despair_count);
 }
 
+
+static void push_options(
+    lua_State *state,
+    const dice_rule_definition_t *definition,
+    const dice_rule_state_t *rule_state)
+{
+    lua_newtable(state);
+
+    if (definition == NULL || rule_state == NULL) {
+        return;
+    }
+
+    for (size_t index = 0;
+         index < definition->control_count;
+         ++index) {
+        lua_pushinteger(
+            state,
+            rule_state->values[index]);
+        lua_setfield(
+            state,
+            -2,
+            definition->controls[index].id);
+    }
+}
+
+static lua_State *load_rules_vm(
+    const dice_rule_definition_t *definition,
+    char **script_out)
+{
+    if (definition == NULL ||
+        !definition->loaded ||
+        script_out == NULL) {
+        return NULL;
+    }
+
+    *script_out = read_file(definition->script_path);
+    if (*script_out == NULL) {
+        return NULL;
+    }
+
+    lua_memory_t *memory = calloc(1, sizeof(*memory));
+    if (memory == NULL) {
+        free(*script_out);
+        *script_out = NULL;
+        return NULL;
+    }
+
+    memory->limit = definition->memory_limit_bytes;
+
+    lua_State *lua = lua_newstate(
+        limited_alloc,
+        memory,
+        0U);
+
+    if (lua == NULL) {
+        free(memory);
+        free(*script_out);
+        *script_out = NULL;
+        return NULL;
+    }
+
+    sandbox(lua);
+
+    s_hook_count = 0;
+    s_hook_limit = definition->instruction_limit;
+    lua_sethook(
+        lua,
+        instruction_hook,
+        LUA_MASKCOUNT,
+        LUA_HOOK_GRANULARITY);
+
+    int status = luaL_loadbuffer(
+        lua,
+        *script_out,
+        strlen(*script_out),
+        definition->script_path);
+
+    if (status == LUA_OK) {
+        status = lua_pcall(lua, 0, 0, 0);
+    }
+
+    if (status != LUA_OK) {
+        ESP_LOGE(TAG, "%s", lua_tostring(lua, -1));
+        lua_close(lua);
+        free(memory);
+        free(*script_out);
+        *script_out = NULL;
+        return NULL;
+    }
+
+    /*
+     * The Lua allocator user-data must remain valid until lua_close().
+     * Store it in the registry so the helper that closes the VM can recover it.
+     */
+    lua_pushlightuserdata(lua, memory);
+    lua_setfield(lua, LUA_REGISTRYINDEX, "spiffy_memory_state");
+
+    return lua;
+}
+
+static void close_rules_vm(
+    lua_State *lua,
+    char *script)
+{
+    if (lua != NULL) {
+        lua_getfield(lua, LUA_REGISTRYINDEX, "spiffy_memory_state");
+        lua_memory_t *memory = lua_touserdata(lua, -1);
+        lua_pop(lua, 1);
+        lua_close(lua);
+        free(memory);
+    }
+
+    free(script);
+}
+
 static void push_roll(
     lua_State *state,
     const dice_custom_roll_result_t *roll)
@@ -282,6 +397,8 @@ bool dice_rules_load(
         cJSON_GetObjectItemCaseSensitive(root, "entry");
     const cJSON *limits =
         cJSON_GetObjectItemCaseSensitive(root, "limits");
+    const cJSON *actions =
+        cJSON_GetObjectItemCaseSensitive(root, "actions");
 
     bool valid =
         cJSON_IsString(format) &&
@@ -333,6 +450,75 @@ bool dice_rules_load(
                 memory_kb->valueint > 0) {
                 definition->memory_limit_bytes =
                     (size_t)memory_kb->valueint * 1024U;
+            }
+        }
+
+
+        if (cJSON_IsArray(actions)) {
+            const cJSON *action = NULL;
+
+            cJSON_ArrayForEach(action, actions) {
+                if (definition->action_count >=
+                    DICE_RULE_MAX_ACTIONS) {
+                    break;
+                }
+
+                if (!cJSON_IsObject(action)) {
+                    continue;
+                }
+
+                const cJSON *id =
+                    cJSON_GetObjectItemCaseSensitive(
+                        action,
+                        "id");
+                const cJSON *label =
+                    cJSON_GetObjectItemCaseSensitive(
+                        action,
+                        "label");
+                const cJSON *available =
+                    cJSON_GetObjectItemCaseSensitive(
+                        action,
+                        "available");
+                const cJSON *apply =
+                    cJSON_GetObjectItemCaseSensitive(
+                        action,
+                        "apply");
+
+                if (!cJSON_IsString(id) ||
+                    !cJSON_IsString(label) ||
+                    !cJSON_IsString(apply)) {
+                    continue;
+                }
+
+                dice_rule_action_t *output =
+                    &definition->actions[
+                        definition->action_count];
+
+                snprintf(
+                    output->id,
+                    sizeof(output->id),
+                    "%s",
+                    id->valuestring);
+                snprintf(
+                    output->label,
+                    sizeof(output->label),
+                    "%s",
+                    label->valuestring);
+                snprintf(
+                    output->apply_function,
+                    sizeof(output->apply_function),
+                    "%s",
+                    apply->valuestring);
+
+                if (cJSON_IsString(available)) {
+                    snprintf(
+                        output->available_function,
+                        sizeof(output->available_function),
+                        "%s",
+                        available->valuestring);
+                }
+
+                ++definition->action_count;
             }
         }
 
@@ -486,7 +672,7 @@ void dice_rules_evaluate(
     }
 
     push_roll(lua, roll);
-    lua_newtable(lua);
+    push_options(lua, definition, state);
 
     status = lua_pcall(lua, 2, 1, 0);
     if (status != LUA_OK) {
@@ -552,11 +738,50 @@ bool dice_rules_action_available(
     size_t index,
     const dice_custom_roll_result_t *roll)
 {
-    (void)definition;
-    (void)state;
-    (void)index;
-    (void)roll;
-    return false;
+    if (definition == NULL ||
+        state == NULL ||
+        roll == NULL ||
+        !definition->loaded ||
+        index >= definition->action_count ||
+        state->action_used[index]) {
+        return false;
+    }
+
+    const dice_rule_action_t *action =
+        &definition->actions[index];
+
+    if (action->available_function[0] == ' ') {
+        return true;
+    }
+
+    char *script = NULL;
+    lua_State *lua =
+        load_rules_vm(definition, &script);
+
+    if (lua == NULL) {
+        return false;
+    }
+
+    lua_getglobal(lua, action->available_function);
+    if (!lua_isfunction(lua, -1)) {
+        close_rules_vm(lua, script);
+        return false;
+    }
+
+    push_roll(lua, roll);
+    push_options(lua, definition, state);
+
+    int status = lua_pcall(lua, 2, 1, 0);
+    bool available =
+        status == LUA_OK &&
+        lua_toboolean(lua, -1);
+
+    if (status != LUA_OK) {
+        ESP_LOGE(TAG, "%s", lua_tostring(lua, -1));
+    }
+
+    close_rules_vm(lua, script);
+    return available;
 }
 
 bool dice_rules_apply_action(
@@ -567,11 +792,120 @@ bool dice_rules_apply_action(
     bool *mask,
     size_t mask_size)
 {
-    (void)definition;
-    (void)state;
-    (void)index;
-    (void)roll;
-    (void)mask;
-    (void)mask_size;
-    return false;
+    if (definition == NULL ||
+        state == NULL ||
+        roll == NULL ||
+        mask == NULL ||
+        !definition->loaded ||
+        index >= definition->action_count ||
+        state->action_used[index]) {
+        return false;
+    }
+
+    memset(mask, 0, mask_size * sizeof(*mask));
+
+    const dice_rule_action_t *action =
+        &definition->actions[index];
+
+    if (action->apply_function[0] == ' ') {
+        return false;
+    }
+
+    char *script = NULL;
+    lua_State *lua =
+        load_rules_vm(definition, &script);
+
+    if (lua == NULL) {
+        return false;
+    }
+
+    lua_getglobal(lua, action->apply_function);
+    if (!lua_isfunction(lua, -1)) {
+        close_rules_vm(lua, script);
+        return false;
+    }
+
+    push_roll(lua, roll);
+    push_options(lua, definition, state);
+
+    int status = lua_pcall(lua, 2, 1, 0);
+    if (status != LUA_OK) {
+        ESP_LOGE(TAG, "%s", lua_tostring(lua, -1));
+        close_rules_vm(lua, script);
+        return false;
+    }
+
+    if (!lua_istable(lua, -1)) {
+        close_rules_vm(lua, script);
+        return false;
+    }
+
+    lua_getfield(lua, -1, "reroll");
+    if (!lua_istable(lua, -1)) {
+        close_rules_vm(lua, script);
+        return false;
+    }
+
+    bool changed = false;
+    lua_Integer count = luaL_len(lua, -1);
+
+    for (lua_Integer item = 1;
+         item <= count;
+         ++item) {
+        lua_rawgeti(lua, -1, item);
+
+        if (lua_isinteger(lua, -1)) {
+            lua_Integer requested =
+                lua_tointeger(lua, -1);
+
+            if (requested >= 1 &&
+                (size_t)requested <= roll->count) {
+                size_t die_index =
+                    (size_t)requested - 1U;
+
+                if (die_index < mask_size &&
+                    !mask[die_index]) {
+                    dice_custom_result_die_t *result =
+                        &roll->dice[die_index];
+
+                    if (result->die != NULL) {
+                        if (result->face != NULL &&
+                            result->face->has_numeric_value) {
+                            roll->numeric_total -=
+                                result->face->numeric_value;
+                        }
+
+                        size_t face_index = 0;
+                        const dice_set_face_t *face =
+                            dice_custom_random_face(
+                                result->die,
+                                &face_index);
+
+                        if (face != NULL) {
+                            result->face = face;
+                            result->face_index = face_index;
+
+                            if (face->has_numeric_value) {
+                                roll->numeric_total +=
+                                    face->numeric_value;
+                            }
+
+                            mask[die_index] = true;
+                            changed = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        lua_pop(lua, 1);
+    }
+
+    close_rules_vm(lua, script);
+
+    if (changed) {
+        state->action_used[index] = true;
+    }
+
+    return changed;
 }

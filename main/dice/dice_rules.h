@@ -14,7 +14,7 @@
 
 typedef enum { DICE_RULE_CONTROL_TOGGLE = 0, DICE_RULE_CONTROL_CHOICE, DICE_RULE_CONTROL_INTEGER } dice_rule_control_type_t;
 typedef struct { char id[32]; char label[32]; char value_suffix[8]; dice_rule_control_type_t type; bool display_main; int default_value; int minimum; int maximum; int step; int choices[8]; size_t choice_count; } dice_rule_control_t;
-typedef struct { char id[32]; char label[32]; } dice_rule_action_t;
+typedef struct { char id[32]; char label[32]; char available_function[32]; char apply_function[32]; } dice_rule_action_t;
 typedef struct {
     bool loaded;
     bool lua;
