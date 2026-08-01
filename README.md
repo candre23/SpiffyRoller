@@ -66,7 +66,8 @@ Precompiled firmware and source archives are also available from the [GitHub Rel
 - Triple-tapping the center of the display clears the current dice pool.
 - The upper physical button on the right side opens and closes the settings menu.
 - When switching dice sets, the device does a half-reset to render and load the dice faces - this is normal.
-- The device will go into hibernation after 5min of inactivity.  Tap the power button to wake it up.
+- There is a display-off timer in the settings.  When the display is off and it's not actually hibernating, simply pick up the doohicky to re-activate the display.
+- The module will go into power-off hibernation after 5min of inactivity.  Tap the power button to wake it up.
 - After copying files in USB transfer mode, tap the settings menu button to reboot and resume normal operation.
 
 
