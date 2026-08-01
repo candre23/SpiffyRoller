@@ -23,17 +23,17 @@ Spiffy Roller is intended to work both as a straightforward electronic replaceme
 
 ## The Doohicky
 
-<img width="450" alt="doohicky" src="https://github.com/user-attachments/assets/c423da78-1d18-4532-9c9f-8baefe7a34a4" />   
+<img width="350" alt="doohicky" src="https://github.com/user-attachments/assets/c423da78-1d18-4532-9c9f-8baefe7a34a4" />   
 
-<img width="450" alt="settings menu" src="https://github.com/user-attachments/assets/b52cac6e-f1eb-4b7a-bd11-8cf9fbf12caa" />
+<img width="350" alt="settings menu" src="https://github.com/user-attachments/assets/b52cac6e-f1eb-4b7a-bd11-8cf9fbf12caa" />
 
-<img width="450" alt="dice selector" src="https://github.com/user-attachments/assets/6fb6d078-e7e0-4298-8560-6d4915044e97" />
+<img width="350" alt="dice selector" src="https://github.com/user-attachments/assets/6fb6d078-e7e0-4298-8560-6d4915044e97" />
 
-<img width="450" alt="controls" src="https://github.com/user-attachments/assets/d1ad2022-8c0b-4c81-8f96-b002a3da224a" />
+<img width="350" alt="controls" src="https://github.com/user-attachments/assets/d1ad2022-8c0b-4c81-8f96-b002a3da224a" />
 
-<img width="450" alt="set options" src="https://github.com/user-attachments/assets/b24cf0e3-a6a5-4f70-871c-f38fb040a2bf" />
+<img width="350" alt="set options" src="https://github.com/user-attachments/assets/b24cf0e3-a6a5-4f70-871c-f38fb040a2bf" />
 
-<img width="450" alt="set selector" src="https://github.com/user-attachments/assets/63da3421-d30e-4284-b06a-2cb0f1e5a8f9" />
+<img width="350" alt="set selector" src="https://github.com/user-attachments/assets/63da3421-d30e-4284-b06a-2cb0f1e5a8f9" />
 
 
 
