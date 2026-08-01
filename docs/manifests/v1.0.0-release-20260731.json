@@ -8,7 +8,7 @@
       "improv": false,
       "parts": [
         {
-          "path": "../firmware/spiffy-roller-v1.0.0-release-20260731.bin",
+          "path": "../firmware/spiffy_roller_v1.0.0_260801.bin",
           "offset": 0
         }
       ]
