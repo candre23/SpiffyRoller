@@ -73,7 +73,7 @@ Precompiled firmware and source archives are also available from the [GitHub Rel
 
 ## Custom Dice Sets
 
-Spiffy Roller supports portable `.set` archives containing custom dice definitions, artwork, colors, values, and optional Lua rules.  To install a .set file, connect the module to your PC with a USB cable, select USB Transfer Mode in the settings menu, and copy the sets into the '/templates' folder on the device.  A custom dice set for the Freeform Universal open source RPG ruleset is included in this repo as 'freeform_universal_v1.set'
+Spiffy Roller supports portable `.set` archives containing custom dice definitions, artwork, colors, values, and optional Lua rules.  To install a .set file, connect the module to your PC with a USB cable, select USB Transfer Mode in the settings menu, and copy the sets into the '/templates' folder on the device.  A custom dice set for the Freeform Universal open source RPG ruleset is included in this repo as '/extras/freeform_universal_v1.set'
 
 Custom sets can be created with the companion graphical editor:
 
@@ -91,7 +91,7 @@ See [custom_dice_template_guide.md](custom_dice_template_guide.md) for the compl
 
 ## Rolling Sound Effect
 
-By default, Spiffy Roller generates an artificial dice-rolling sound effect.  You can replace this with the sound of your choice by putting the doohicky into USB transfer mode and copying a mono 16khz dice_roll.wav file into the audio folder.  I have included a rather pleasing dice roll sample in this repo, but feel free to use whatever floats your boat.
+By default, Spiffy Roller generates an artificial dice-rolling sound effect.  You can replace this with the sound of your choice by putting the module into USB transfer mode and copying a mono 16khz dice_roll.wav file into the audio folder.  I have included a rather pleasing dice roll sample in the `/extras` folder of this repo, but feel free to use whatever floats your boat.
 
 ## Full Documentation
 
