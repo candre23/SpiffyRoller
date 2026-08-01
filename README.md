@@ -54,11 +54,21 @@ The easiest installation method is the browser-based Spiffy Roller flasher:
 
 **https://candre23.github.io/SpiffyRoller/**
 
-A current desktop version of Chrome or Microsoft Edge is recommended.
-
-The installer flashes a precompiled firmware image directly over USB, so ESP-IDF, Python, an IDE, and a local build environment are not required.
+A current desktop version of a Chromium-based browser is recommended.
 
 Precompiled firmware and source archives are also available from the [GitHub Releases](https://github.com/candre23/SpiffyRoller/releases) page.
+
+## Basic Usage
+
+- Swipe left/right across the bottom of the display to choose a die type, and swipe up/down along the right edge of the display to select quantity.  
+- Shake the doohicky to roll.  
+- If the current set has special after-roll options, tap the set options in the upper left corner of the dice tray to bring up that menu.  
+- Triple-tapping the center of the display clears the current dice pool.
+- The upper physical button on the right side opens and closes the settings menu.
+- When switching dice sets, the device does a half-reset to render and load the dice faces - this is normal.
+- The device will go into hibernation after 5min of inactivity.  Tap the power button to wake it up.
+- After copying files in USB transfer mode, tap the settings menu button to reboot and resume normal operation.
+
 
 ## Custom Dice Sets
 
@@ -78,7 +88,11 @@ The `.set` format is open and documented so sets may also be created by hand or 
 
 See [dice_templates.md](dice_templates.md) for the complete format specification.
 
-## Documentation
+## Rolling Sound Effect
+
+By default, Spiffy Roller generates an artificial dice-rolling sound effect.  You can replace this with the sound of your choice by putting the doohicky into USB transfer mode and copying a mono 16khz dice_roll.wav file into the audio folder.  I have included a rather pleasing dice roll sample in this repo, but feel free to use whatever floats your boat.
+
+## Full Documentation
 
 Detailed operating instructions are available in:
 
