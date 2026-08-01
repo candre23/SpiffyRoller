@@ -123,9 +123,13 @@ idf.py merge-bin
 
 ## Related Repositories
 
-- **Spiffy Roller firmware:** https://github.com/candre23/SpiffyRoller
 - **Spiffy Roller Set Maker:** https://github.com/candre23/SpiffyRoller_SetMaker
 - **Spiffy Roller Dice Sets:** https://github.com/candre23/SpiffyRoller_DiceSets
+
+## AI & Safety Disclaimer
+
+The code and documentation included in this project is primarily vibeslop.  The human writing this sentence in particular can barely code and doesn't really understand how any of this works.  It Works On My Machine and hasn't caused my genitals to explode, but your mileage may vary.  I make absolutely no guarantee as to the safety or security of the contents of this project.  Use at your own risk.  Or don't.
+
 
 ## License
 
@@ -133,4 +137,4 @@ Spiffy Roller is released into the public domain under [The Unlicense](LICENSE).
 
 Third-party libraries and dependencies remain subject to their respective licenses. See [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) for attribution and licensing information.
 
-Spiffy Roller is public domain software. Copyleft 2026. Do what thou wilt shall be the whole of the law. One step closer to AGI.
+Copyleft 2026. Do what thou wilt shall be the whole of the law. One step closer to AGI.
