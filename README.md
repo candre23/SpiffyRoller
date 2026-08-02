@@ -35,7 +35,7 @@ Spiffy Roller is intended to work both as a straightforward electronic replaceme
 
 <img width="350" alt="set selector" src="https://github.com/user-attachments/assets/63da3421-d30e-4284-b06a-2cb0f1e5a8f9" />
 
-
+https://github.com/user-attachments/assets/ba583139-219a-478f-819b-db22cd682cfb
 
 
 ## Supported Hardware
